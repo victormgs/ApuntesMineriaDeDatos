@@ -1,0 +1,235 @@
+---
+title: "Unix - Limpieza de datos"
+author: "MSc Liliana Millán, liliana.millan@gmail.com"
+date: "Enero, 2017"
+output: html_document
+---
+
+![](../images/itam_logo.png)
+
+***
+
+### Agenda
+
++ Unix para revisión rápida de datos
+    + cd
+    + mkdir
+    + ls
+    + head
+    + tail
+    + wc  
+    + grep 
+    + split
++ awk para revisión de datos
++ sed para eliminación de renglones
++ iconv para encoding
++ Tarea
++ Referencias 
+
+***
+
+Es muy común en análisis de datos que cuando recibimos/obtenemos los datos que vamos a analizar —normalmente de varios gigas de tamaño— siempre tienen algún problema:
+
++ El número de columnas por renglón es diferente $\rightarrow$ esto no permite que se cargue a ninguna base de datos relacional (estructurada) normal: postgreSQL, MySQL
++ El encoding le da en la torre a los acentos y símbolos de puntuación —deberían estar en UTF-8— y están en alguna cosa rara que windows generó...
++ Los datos de fechas están mal formateados... 
++ ...
+
+Debido al tamaño de los archivos, es imposible abrirlos en editores de texto comunes ([atom](https://atom.io/), [sublime text](https://www.sublimetext.com/), text, —en excel ni si quiera caben—, y en las bases de datos tradicionales (relacionales) no se pueden subir porque no cumplen con las reglas de estructura o esquema. En estos casos se ocupan las herramientas de Unix para ver rápidamente los datos —parte de ellos— sin tener que cargar todos los datos y esperar media hora para que te salga un mensaje de error! (╯°□°）╯︵ ┻━┻
+
+Unix te permite identificar los puntos de error y corregirlos de manera **eficiente**. 
+
+### Unix 
+
+Unix es **EL** sistema operativo para los programadores y para el análisis de datos. Se prefiere a otro sistemas operativos —Microsoft IUGGG— por su facilidad de uso y su optimización para trabajar con muchos datos desde que existe —1960—. 
+
++ En windows se puede ocupar [UnxUtils](https://sourceforge.net/projects/unxutils/), [win-bash](http://win-bash.sourceforge.net/)
++ En mac se puede ocupar [coreutils](https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x/) 
+
+#### pwd 
+
+Te permite saber en qué directorio te encuentras
+
+```{bash}
+pwd
+```
+
+#### cd
+
+Permite cambiar de directorio `cd path/directorio/que/quieres`. Si ocupas `..` te subirá al nivel inmediato del que te encuentres, puedes concatenar varios `..`
+
+```{bash}
+cd ../images
+pwd
+```
+
+
+#### mkdir
+
+Permite crear un directorio `mkdir path/del/nuevo/directorio/nombre_directorio`
+
+```{bash}
+mkdir ~/Documents/itam/mineria_datos_licenciatura/test
+```
+
+
+#### touch
+
+Permite crear un archivo `touch nombre_archivo.csv`
+
+```{bash}
+cd ~/Documents/itam/mineria_datos_licenciatura/test
+touch test.psv
+```
+
+#### ls 
+
+Permite listar el contenido de un directorio, si le agregas la bandera `-lah` permite ver la información de cada archivo en forma *humana* 
+
+```{bash}
+cd ~/Documents/itam/mineria_datos_licenciatura/test
+ls 
+ls -lah
+```
+
+#### rm
+
+Borrar un archivo `rm path/archivo/que/quieres/borrar/arhivo.csv` o bien un directorio agregando el flag `-r` -recursive-
+
+```{bash}
+rm -r ~/Documents/itam/mineria_datos_licenciatura/test
+```
+
+
+#### head 
+
+Permite sacar los n primeros renglones de un archivo `head -3 nombrearchivo` —este comando muestra las primeras 3 líneas del archivo nombrearchivo—.
+
+```{bash}
+cd ~/Documents/itam/mineria_datos_licenciatura/data
+head Pokemon.csv
+```
+
+
+#### tail
+
+Permite ver los últimos n renglones de un archivo `tail -4 nombrearchivo` —este comando muestra las últimas 4 líneas del archivo nombrearchivo—.
+
+```{bash}
+cd ~/Documents/itam/mineria_datos_licenciatura/data
+tail Pokemon.csv
+```
+
+#### wc
+
+Este comando permite contar las líneas de un archivo `wc -l nombrearchivo` —este comando devolverá el número de líneas que tiene el archivo nombrearchivo—.
+
+```{bash}
+cd ~/Documents/itam/mineria_datos_licenciatura/data
+wc -l Pokemon.csv
+```
+
+#### grep
+
+Este archivo permite buscar cadenas de texto particulares en un archivo `grep 'texto' nombrearchivo` —este comando devolverá el contenido de las líneas del archivo que contienen la palabra texto, `grep -nr 'texto' nombrearchivo` —este comando devolverá los números de línea que contienen la palabra texto además del contenido de las líneas—.
+
+```{bash}
+cd ~/Documents/itam/mineria_datos_licenciatura/data
+grep 'Iggly.*' Pokemon.csv
+grep -nr 'Iggly.*' Pokemon.csv
+```
+
+#### split
+
+Divide un archivo en muchos archivos de acuerdo al número de líneas o al tamaño de los archivos `split -l 10000 nombrearchivo nombreprefijo` —este comando dividirá el archivo nombrearchivo en n archivos de 10000 renglones cada uno con el prefijo en su nombre de archivo nombreprefijo—, `split -b 1G nombrearchivo nombreprefijo` —este comando dividirá el archivo nombre archivo en n archivo de 1G cada uno con el prefijo nombreprefijo—.
+
+
+### awk
+
+Awk es un lenguaje de Unix que permite realizar scripts para manipular archivos de texto —es muy poderoso— aunque poco utilizado por los programadores normales. Lo ocupamos porque aguanta una gran cantidad de datos —gigas de información— y es eficiente en su uso de recursos. [AWK](http://www.grymoire.com/Unix/Awk.html)
+
+`awk -F',' '{if(NF > 30) print NR,NF;}' 'data.csv'` —este comando dividirá cada línea del archivo en calumnas utilzando la coma como separador, revisa si el número de columnas —NF number of fields— es mayor que 30, si lo es entonces imprimirá el número de renglón —NR number of row— y el númeor de columnas en ese renglón —NF— del archivo data.csv. 
+
+De esta manera podemos identificar qué renglones son los que tienen errores para pasarlos a otro archivo y arreglarlos —y dejar registro histórico del número de renglones que tienen una columna más o menos en el set de datos.
+
+
+```{bash}
+cd ~/Documents/itam/mineria_datos_licenciatura/data
+awk -F',' '{if(NF > 12) print NR, NF;}' 'Pokemon.csv' | head
+```
+
+### sed 
+
+Sed se ocupa para borrar una línea específica de un archivo `sed -i -e '3d' nombrearchivo` —este comando elimina la línea 3 del archivo nombrearchivo—  o bien varias líneas de un archivo `sed -i -e '7,9d' nombrearchivo` —este comando elimina las líneas 7 y 9 del archivo nombrearchivo—.
+
+Ver una línea específica de algún archivo `sed -n '12p' nombrearchivo` —este comando regresa la línea 12 del archivo nombrearchivo—.
+
+```{bash}
+cd ~/Documents/itam/mineria_datos_licenciatura/data
+
+sed -n '12p' Pokemon.csv
+```
+
+
+#### iconv
+
+Este comando permite modificar el encoding de archivo `ìconv -f UTF-8 -t ASCII nombrearchivo` —este comando convierte el encoding del archivo nombrearchivo de ASCII a UTF-8. En el caso en el que no sepamos qué encoding tiene originalmente el archivo se ocupa `file -bi nombrearchivo`. Normalmente trabajamos con encoding UTF-8 para no tener problemas con los acentos. 
+
+```{bash}
+cd ~/Documents/itam/mineria_datos_licenciatura/data
+file -bi Pokemon.csv
+```
+
+#### man 
+
+El comando man permite ver la documentación asociada a algún comando a Unix para conocer todas las opciones asociadas al comando —man manual— `man iconv` —este comando regresa el manual de uso del comando iconv—.
+
+```{bash}
+man iconv
+```
+
+
+<div style="background-color:#ffcf40">
+
+![](../images/pointer.png) Por favor revisa el Rmd de este apunte para que veas cómo se ejecuta código bash desde un Rmd, lo necesitarás para tu tarea!
+
+</div>
+
+***
+### Tarea 
+
++ Fecha de entrega **10 septiembre 2017**, 23:59:59 CST en tu carpeta en git `alumnos/nombre_apellido/tarea_3_unix.Rmd`
++ Descomprime el archivo **profeco.csv.zip** (el campo de separación es la coma)
++ Utilizando el comando wc, ¿cuántas líneas tiene el archivo? 
++ ¿Cuántas columnas tiene el archivo de acuerdo a la primera línea del archivo?  
++ Utilizando awk, ¿Cuántos y cuáles son los renglones que tienen más de 28 columnas?
++ Utilizando awk, ¿Cuántos y cuáles son los renglones que tienen menos de 15 columnas?
++ Utilizando el comando split separa el archivo original en archivos de 100MB utilizando como prefijo la palabra tarea_matricula_, ¿cuántos archivos generó el split? agrega una foto de los archivos generados
++ Con grep busca la palabra 'ROSITA FRESITA', cuáles son las primeras 10 líneas que contienen esta palabra? 
++ Con sed imprime la línea 387124 del archivo
+
+
+**Puntos a calificar**
+
++ Entregó el html/Rmd con el código de cómo obtuvo la respuesta a cada pregunta -chunk de bash-: 1
++ Número de líneas que tiene el archivo: 1
++ Número de columnas que tiene la primer línea del archivo ocupando awk NF: 1
++ Cuántos y cuáles fueron los renglones que tienen más de 28 columnas: 1
++ Cuántos y cuáles fueron los renglones con menos de 15 columnas: 1
++ Número de archivos generados con split: 1 
++ Agregó foto de los archivos generados: 1
++ Indicó cuáles fueron las primeras 10 líneas con la palabra de búsqueda: 2
++ Imprimió la línea 387124 del archivo: 1
+
+Total: 10
+
+***
+### Referencias 
+
++ [Basic Unix Commands](http://mally.stanford.edu/~sr/computing/basic-unix.html)
++ [Unix useful commands](https://www.tutorialspoint.com/unix/unix-useful-commands.htm)
++ [AWK](http://www.grymoire.com/Unix/Awk.html)
++ [AWK más lindo](https://www.tutorialspoint.com/unix_commands/awk.htm)
++ [Grep](http://www.tutorialspoint.com/unix_commands/grep.htm)
++ [Expresiones regulares](https://regexone.com/)
++ [Nano editor](https://www.nano-editor.org/dist/v2.2/nano.html)

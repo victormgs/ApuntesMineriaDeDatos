@@ -1,0 +1,53 @@
+---
+title: "Temario"
+author: "Liliana Millán, liliana.millan@gmail.com"
+date: "Junio 2017"
+output: html_document
+---
+
+![](images/itam_logo.png)
+
+***
+
++ **Horario: Lunes y Miércoles 19 - 20.30 pm**
++ **Salón:** CC201 Río Hondo
+
+|Sesión|Fecha|Tema|Detalles|
+|:--:|:-----------|:----------------------|:----------------------------|
+|1|14 agosto 2017|Introducción|Cómo se compone el curso, calificaciones, medios de comunicación. Introducción a minería de datos|
+|2|16 agosto 2017|Git||
+|3|21 agosto 2017|Git||
+|4|23 agosto 2017|R como herramienta de análisis, visualización y documentación|Tipos de datos, operaciones|
+|5|28 agosto 2017|R como herramienta de análisis, visualización y documentación|dplyr, tidyr, magrittr, readr|
+|6|30 agosto 2017|R como herramienta de análisis, visualización y documentación|RMD|
+|7|4 septiembre 2017|R como herramienta de análisis, visualización y documentación|ggplot, plotly, googleVis, shiny|
+|8|6 septiembre 2017|Unix|grep, awk, head, tail, sed|
+|9|11 septiembre 2017|ETL|Carga de datos, Limpieza de datos|
+|10|13 septiembre 2017|ETL|Transformación de datos|
+|11|18 septiembre 2017|Data Profiling|Metadata, categóricas, numéricas|
+|12|20 septiembre 2017|Data Profiling|Similitud de Jaccard, correlación entre columnas, levenshtein|
+|13|25 septiembre 2017|EDA||
+|14|27 septiembre 2017|EDA||
+|15|2 octubre 2017|Machine Learning - métodos supervisados|Clasificación - naive bayes|
+|16|4 octubre 2017|Machine Learning - métodos supervisados|Clasificación - métricas de desempeño de clasificación|
+|17|9 octubre 2017|Machine Learning - métodos supervisados|Clasificación - árboles|
+|18|11 octubre 2017|Machine Learning - métodos supervisados|Clasificación - random forest|
+|18|11 octubre 2017|EXAMEN PARCIAL 1| EXAMEN PARCIAL 1|
+|19|16 octubre 2017|Machine Learning - métodos supervisados|Regresión/clasificación - regresión lineal|
+|20|18 octubre 2017|Machine Learning - métodos supervisados|Regresión -  métricas de desempeño de regresión|
+|21|23 octubre 2017|Machine Learning - métodos supervisados|Regresión - regresión logística|
+|22|25 octubre 2017|Machine Learning - métodos supervisados|Regresión - redes neuronales|
+|23|30 octubre 2017|Machine Learning - métodos supervisados|Regresión - redes neuronales|
+|24|1 noviembre 2017|Machine Learning - métodos supervisados|Regresión - árboles|
+|25|6 noviembre 2017|Machine Learning - métodos supervisados|Regresión - random forest|
+|26|8 noviembre 2017|Machine Learning - métodos no supervisados|Agrupación - k-means|
+|27|13 noviembre 2017|Machine Learning - métodos no supervisados|Agrupación - dendogramas|
+|28|15 noviembre 2017|Machine Learning - métodos no supervisados|Agrupación - SOM - Kohonen|
+|29|20 noviembre 2017|ASUETO|ASUETO|
+|30|22 noviembre 2017|Machine Learning - métodos no supervisados|Agrupación - SOM - Kohonen|
+|31|27 noviembre 2017|Machine Learning - métodos no supervisados|Asociación - Apiori|
+|32|29 noviembre 2017|Information Retrieval|Minería de texto|
+|33|4 diciembre 2017|Information Retrieval|Minería de texto - TF/IDF|
+|34|6 diciembre 2017|Information Retrieval|BM25 - Caso de negocio|
+
+\*\* Las fechas son meramente informativas, pueden cambiar de orden dependiendo del avance del grupo. La fecha del examen parcial es TENTATIVA!
